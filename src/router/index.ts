@@ -1,26 +1,88 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+
+import { storeToRefs } from 'pinia'
+
+import { useAuthStore } from './../store/auth.store'
+
+import AppLayout from '../layouts/app/AppLayout.vue'
+import EmptyLayout from '../layouts/EmptyLayout.vue'
+
+import EmptyPage from '../pages/EmptyPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: "/",
-    name: "home",
-    component: HomeView,
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
-];
+    {
+        path: '/',
+        component: AppLayout,
+        children: [
+            {
+                path: '',
+                component: EmptyPage,
+            },
+            {
+                path: 'empty',
+                meta: {
+                    auth: true,
+                    breadcrumb: {
+                        labelKey: 'empty',
+                        href: true,
+                    },
+                },
+                component: EmptyPage,
+            },
+        ],
+    },
+    {
+        path: '/auth',
+        component: EmptyLayout,
+        children: [
+            {
+                path: '',
+                redirect: { name: 'auth.login.page' },
+            },
+            {
+                path: 'login',
+                name: 'auth.login.page',
+                component: () => import('../pages/auth/LoginPage.vue'),
+            },
+        ],
+    },
+    {
+        path: '/error',
+        name: 'error.page',
+        component: () => import('../pages/ErrorPage.vue'),
+    },
+    {
+        path: '/access-denied',
+        name: 'access-denied.page',
+        component: () => import('../pages/AccessDeniedPage.vue'),
+    },
+    {
+        path: '/not-found',
+        name: 'not-found.page',
+        component: () => import('../pages/NotFoundPage.vue'),
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: { name: 'not-found.page' },
+    },
+]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
-});
+    history: createWebHistory(process.env.BASE_URL),
+    routes,
+})
 
-export default router;
+router.beforeEach((_to, _from, next) => {
+    window.scrollTo(0, 0)
+
+    const { isLoggedIn } = storeToRefs(useAuthStore())
+
+    if (_to.matched.some((m) => m.meta.auth) && !isLoggedIn) {
+        next({ name: 'auth.login.page' })
+        return
+    }
+
+    next()
+})
+
+export default router

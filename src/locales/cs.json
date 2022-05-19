@@ -1,0 +1,8 @@
+{
+    "required": "Musí být vyplněn | Musí být vyplněna | Musí být vyplněno",
+    "car": "Žádné auto | Jedno auto | {count} auta | {count} aut",
+    "validations": {
+        "required": "{property} musí být vyplněn.",
+        "minLength": "The {property} field has a value of '{model}', but it must have a min length of {min}."
+    }
+}
