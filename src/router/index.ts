@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { get } from '@vueuse/core'
 
 import { storeToRefs } from 'pinia'
 
@@ -72,12 +73,12 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((_to, _from, next) => {
+router.beforeEach((to, _from, next) => {
     window.scrollTo(0, 0)
 
     const { isLoggedIn } = storeToRefs(useAuthStore())
 
-    if (_to.matched.some((m) => m.meta.auth) && !isLoggedIn) {
+    if (to.matched.some((m) => m.meta.auth) && !get(isLoggedIn)) {
         next({ name: 'auth.login.page' })
         return
     }

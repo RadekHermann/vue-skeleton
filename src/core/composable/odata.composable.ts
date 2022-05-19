@@ -1,33 +1,14 @@
-import { ODataResult } from '@/core/types/odata.result'
 import { Ref, ref } from 'vue'
+
+import { set } from '@vueuse/core'
 
 import buildQuery, { QueryOptions } from 'odata-query'
 import axios, { AxiosError } from 'axios'
 
-// export function useODataListTable<T>(controller: string) {
-//     const { count, error, fetchData: fetch, isLoading, result } = useODataList<T>(controller)
+import { ODataResult } from '@/core/types/odata.result'
+import { ODataKey } from '@/core/types/odata.key'
 
-//     const fetchData = (query?: Partial<QueryOptions<T>>) => {
-//         const { page, rowsPerPage, sortBy, descending } = {pagination}
-
-//         const top = !!rowsPerPage ? rowsPerPage : undefined
-//         const skip = !!top ? (page - 1) * top : undefined
-//         const orderBy = !!sortBy ? (descending ? `${sortBy.replace('.', '/')} desc` : sortBy.replace('.', '/')) : undefined
-
-//         const queryOptions: Partial<QueryOptions<T>> = { ...query, top, skip, orderBy, count: true }
-
-//         fetch(queryOptions)
-//     }
-
-//     return {
-//         isLoading,
-//         result,
-//         count,
-//         error,
-
-//         fetchData,
-//     }
-// }
+const baseURL = '/odata/'
 
 export function useODataList<T>(controller: string) {
     const isLoading = ref(false)
@@ -36,19 +17,19 @@ export function useODataList<T>(controller: string) {
     const error = ref<AxiosError | null>(null)
 
     const fetchData = (query?: Partial<QueryOptions<T>>) => {
-        isLoading.value = true
-        error.value = null
+        set(isLoading, true)
+        set(error, null)
 
         const queryOptions = { ...query, count: true }
 
         return axios
-            .get<ODataResult<T>>(`/odata/${controller}${buildQuery(queryOptions)}`)
+            .get<ODataResult<T>>(baseURL + `${controller}${buildQuery(queryOptions)}`)
             .then(({ data }) => {
-                result.value = data.value
-                count.value = data['@odata.count']
+                set(result, data.value)
+                set(count, data['@odata.count'])
             })
-            .catch((err: AxiosError) => (error.value = err))
-            .finally(() => (isLoading.value = false))
+            .catch((err: AxiosError) => set(error, err))
+            .finally(() => set(isLoading, false))
     }
 
     return {
@@ -66,16 +47,17 @@ export function useODataGet<T>(controller: string) {
     const result = ref(null) as Ref<T | null>
     const error = ref<AxiosError | null>(null)
 
-    const fetchData = (id: string, query?: Partial<QueryOptions<T>>) => {
-        isLoading.value = true
+    const fetchData = (id: ODataKey, query?: Partial<QueryOptions<T>>) => {
+        set(isLoading, true)
+        set(error, null)
 
-        const queryOptions = { ...query, key: { type: 'guid', value: id } }
+        const queryOptions = { ...query, key: id }
 
         axios
-            .get<T>(`/odata/${controller}${buildQuery(queryOptions)}`)
-            .then(({ data }) => (result.value = data))
-            .catch((err: AxiosError) => (error.value = err))
-            .finally(() => (isLoading.value = false))
+            .get<T>(baseURL + `${controller}${buildQuery(queryOptions)}`)
+            .then(({ data }) => set(result, data))
+            .catch((err: AxiosError) => set(error, err))
+            .finally(() => set(isLoading, false))
     }
 
     return {
@@ -93,14 +75,14 @@ export function useODataPost<T>(controller: string) {
     const error = ref<AxiosError | null>(null)
 
     const postData = (data: Partial<T>) => {
-        isPosting.value = true
-        error.value = null
+        set(isPosting, true)
+        set(error, null)
 
         return axios
-            .post<T>(`/odata/${controller}`, data)
-            .then(({ data }) => (result.value = data))
-            .catch((err: AxiosError) => (error.value = err))
-            .finally(() => (isPosting.value = false))
+            .post<T>(baseURL + `${controller}`, data)
+            .then(({ data }) => set(result, data))
+            .catch((err: AxiosError) => set(error, err))
+            .finally(() => set(isPosting, false))
     }
 
     return {
@@ -117,15 +99,15 @@ export function useODataPatch<T>(controller: string) {
     const result = ref(null) as Ref<T | null>
     const error = ref<AxiosError | null>(null)
 
-    const patchData = (id: string, data: Partial<T>) => {
-        isPatching.value = true
-        error.value = null
+    const patchData = (id: ODataKey, data: Partial<T>) => {
+        set(isPatching, true)
+        set(error, null)
 
         return axios
-            .patch<T>(`/odata/${controller}${buildQuery({ key: { value: id, type: 'guid' } })}`, data)
-            .then(({ data }) => (result.value = data))
-            .catch((err: AxiosError) => (error.value = err))
-            .finally(() => (isPatching.value = false))
+            .patch<T>(baseURL + `${controller}${buildQuery({ key: { value: id, type: 'guid' } })}`, data)
+            .then(({ data }) => set(result, data))
+            .catch((err: AxiosError) => set(error, err))
+            .finally(() => set(isPatching, false))
     }
 
     return {

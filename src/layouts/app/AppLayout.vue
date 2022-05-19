@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, onBeforeUpdate } from 'vue'
+import { get, set } from '@vueuse/core'
 
 import { MenuItem } from '@/core/types/menu-item'
 
@@ -47,29 +48,29 @@ export default defineComponent({
         }
 
         const onWrapperClick = () => {
-            if (!menuClick.value) {
-                mobileMenuActive.value = false
+            if (!get(menuClick)) {
+                set(mobileMenuActive, false)
             }
 
-            menuClick.value = false
+            set(menuClick, false)
         }
 
         const onMenuToggle = () => {
-            menuClick.value = true
+            set(menuClick, true)
             if (isDesktop()) {
-                menuInactive.value = !menuInactive.value
+                set(menuInactive, !get(menuInactive))
             } else {
-                mobileMenuActive.value = !mobileMenuActive.value
+                set(mobileMenuActive, !get(mobileMenuActive))
             }
         }
 
         const onSidebarClick = () => {
-            menuClick.value = true
+            set(menuClick, true)
         }
 
         const onMenuItemClick = (e: { item: MenuItem }) => {
             if (e.item && !e.item.items) {
-                mobileMenuActive.value = false
+                set(mobileMenuActive, false)
             }
         }
 
@@ -85,7 +86,7 @@ export default defineComponent({
 
         const isSidebarVisible = () => {
             if (isDesktop()) {
-                return !menuInactive.value
+                return !get(menuInactive)
             }
             return true
         }
@@ -95,14 +96,14 @@ export default defineComponent({
                 'layout-wrapper',
                 'layout-static',
                 {
-                    'layout-static-sidebar-inactive': menuInactive.value,
-                    'layout-mobile-sidebar-active': mobileMenuActive.value,
+                    'layout-static-sidebar-inactive': get(menuInactive),
+                    'layout-mobile-sidebar-active': get(mobileMenuActive),
                 },
             ]
         })
 
         onBeforeUpdate(() => {
-            if (mobileMenuActive.value) addClass(document.body, 'body-overflow-hidden')
+            if (get(mobileMenuActive)) addClass(document.body, 'body-overflow-hidden')
             else removeClass(document.body, 'body-overflow-hidden')
         })
 

@@ -60,6 +60,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, Ref } from 'vue'
+import { get, set } from '@vueuse/core'
 
 import { MenuItem } from '@/core/types/menu-item'
 
@@ -92,7 +93,8 @@ export default defineComponent({
                 item.command({ originalEvent: event, item: item })
             }
 
-            activeIndex.value = index === activeIndex.value ? null : index
+            set(activeIndex, index === get(activeIndex) ? null : index)
+
             emit('menuitem-click', {
                 originalEvent: event,
                 item: item,

@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="onSubmit" autocomplete="on">
         <div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
             <div class="grid justify-content-center p-2 lg:p-0" style="min-width: 80%">
                 <div
@@ -25,12 +25,14 @@
                                 </label>
                                 <PInputText
                                     id="userName"
+                                    ref="inputUserName"
                                     v-model="v$.userName.$model"
                                     type="text"
                                     class="w-full"
                                     :placeholder="t('UserName')"
                                     style="padding: 1rem"
                                     :class="{ 'p-invalid': v$.userName.$invalid && submitted }"
+                                    autocomplete="on"
                                 />
                                 <small v-if="v$.userName.required.$invalid && submitted" class="p-error">
                                     {{ t('UserNameRequired') }}
@@ -42,7 +44,7 @@
                                     {{ t('Password') }} <span style="color: red">*</span>
                                 </label>
                                 <PPassword
-                                    id="password"
+                                    id="current-password"
                                     v-model="v$.password.$model"
                                     :placeholder="t('Password')"
                                     :toggleMask="true"
@@ -51,6 +53,7 @@
                                     inputStyle="padding:1rem"
                                     :feedback="false"
                                     :class="{ 'p-invalid': v$.userName.$invalid && submitted }"
+                                    autocomplete="on"
                                 />
                                 <small v-if="v$.password.required.$invalid && submitted" class="p-error">
                                     {{ t('PasswordRequired') }}
@@ -98,6 +101,7 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
+import { get, set, onStartTyping } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
 import { useAuthStore } from '@/store/auth.store'
@@ -128,6 +132,7 @@ export default defineComponent({
         DarkmodeSwitch,
     },
     setup() {
+        const inputUserName = ref()
         const { t } = useI18n({ inheritLocale: true, useScope: 'local', messages: i18nMessages })
         const { state, logIn } = useAuthStore()
 
@@ -147,17 +152,23 @@ export default defineComponent({
 
         const v$ = useVuelidate(rules, formData)
 
-        const onSubmit = () => {
-            submitted.value = true
+        const onSubmit = async () => {
+            set(submitted, true)
 
-            if (v$.value.$invalid) {
-                return
+            if (!get(v$).$invalid) {
+                logIn(formData.userName, formData.password, formData.rememberMe)
             }
-
-            logIn(formData.userName, formData.password, formData.rememberMe)
         }
 
+        onStartTyping(() => {
+            if (!get(inputUserName).$el.active) {
+                get(inputUserName).$el.focus()
+            }
+        })
+
         return {
+            inputUserName,
+
             v$,
             t,
 

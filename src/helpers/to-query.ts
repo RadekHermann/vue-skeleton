@@ -64,7 +64,6 @@ export function toQuery<T>(e: DataTableSortEvent): Partial<QueryOptions<T>> {
     }
 
     return {
-        count: true,
         orderBy,
         skip,
         top,

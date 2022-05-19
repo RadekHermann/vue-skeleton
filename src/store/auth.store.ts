@@ -3,7 +3,10 @@ import { useRouter } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import axios, { AxiosError } from 'axios'
-import { User } from '@/models/user'
+
+import { User } from '@/models'
+
+const baseURL = '/api/auth/'
 
 type AuthState = {
     user: User | null
@@ -31,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
         state.isLoginLoading = true
         state.loginError = null
         axios
-            .post('/api/auth/login', { userName, password, rememberMe })
+            .post(baseURL + 'login', { userName, password, rememberMe })
             .then(
                 () =>
                     initUser().then(() => {
@@ -43,7 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const logOut = () => {
-        axios.get('/api/auth/logout').finally(() => {
+        axios.get(baseURL + 'logout').finally(() => {
             window.location.reload()
         })
     }
@@ -52,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
         state.isInitLoading = false
 
         return axios
-            .get<User>('/api/auth/user')
+            .get<User>(baseURL + 'user')
             .then(({ data }) => (state.user = data))
             .catch(() => {
                 if (router.currentRoute.value.meta.auth && router.currentRoute.value.name !== 'auth.login.page') {

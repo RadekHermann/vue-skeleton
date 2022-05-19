@@ -1,5 +1,5 @@
-import { primeEn } from './../locales/prime.en'
 import { readonly, reactive } from 'vue'
+import { get, set, useNavigatorLanguage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 import { changeTheme, darkModePreference } from '@/helpers/dark-mode'
@@ -7,6 +7,7 @@ import { useI18n } from 'vue-i18n'
 import { usePrimeVue } from 'primevue/config'
 
 import { primeCs } from '@/locales/prime.cs'
+import { primeEn } from '@/locales/prime.en'
 
 type AppState = {
     darkTheme: boolean
@@ -15,11 +16,12 @@ type AppState = {
 
 export const useAppStore = defineStore('app', () => {
     const { locale: i18nLocale } = useI18n()
+    const { language } = useNavigatorLanguage()
     const p$ = usePrimeVue()
 
     const state = reactive<AppState>({
         darkTheme: localStorage.getItem('darkTheme') === null ? darkModePreference() : localStorage.getItem('darkTheme') === 'true',
-        locale: localStorage.getItem('locale') ?? 'cs',
+        locale: localStorage.getItem('locale') ?? get(language)?.split('-')[0] ?? 'cs',
     })
 
     const toggleDarkTheme = () => {
@@ -32,7 +34,7 @@ export const useAppStore = defineStore('app', () => {
 
     const setLocale = (locale: string) => {
         state.locale = locale
-        i18nLocale.value = locale
+        set(i18nLocale, locale)
 
         localStorage.setItem('locale', locale)
 
@@ -47,13 +49,8 @@ export const useAppStore = defineStore('app', () => {
         }
     }
 
-    const initDarkTheme = () => {
-        changeTheme(state.darkTheme)
-    }
-
-    const initLocale = () => {
-        setLocale(state.locale)
-    }
+    const initDarkTheme = () => changeTheme(state.darkTheme)
+    const initLocale = () => setLocale(state.locale)
 
     initDarkTheme()
     initLocale()

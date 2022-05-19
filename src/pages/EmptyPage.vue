@@ -72,7 +72,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref, computed, onUnmounted } from 'vue'
 
-import { useI18n } from 'vue-i18n'
+import { get, set } from '@vueuse/core'
 
 import { toQuery } from '@/helpers/to-query'
 import { useODataList } from '@/core/composable/odata.composable'
@@ -104,7 +104,7 @@ export default defineComponent({
             window.removeEventListener('resize', handleResize)
         })
 
-        const handleResize = () => (windowHeight.value = window.innerHeight)
+        const handleResize = () => set(windowHeight, window.innerHeight)
 
         const { isLoading: loading, fetchData, result, count: totalRecords } = useODataList<any>('material')
 
@@ -115,39 +115,38 @@ export default defineComponent({
             id: { operator: OperatorMode.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
             nazev: { operator: OperatorMode.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         })
-        const lazyParams = ref({ first: 0, rows: 20, filters: filters.value }) as Ref<DataTableSortEvent>
+        const lazyParams = ref({ first: 0, rows: 20, filters: get(filters) }) as Ref<DataTableSortEvent>
 
-        const scrollHeight = computed(() => {
-            return windowHeight.value - 230 - 58 - 42 + 16 + 14 + 7 - 45 + 'px'
-        })
+        const scrollHeight = computed(() => get(windowHeight) - 230 - 58 - 42 + 16 + 14 + 7 - 45 + 'px')
 
         const loadLazyData = () => {
-            fetchData(toQuery(lazyParams.value))
+            fetchData(toQuery(get(lazyParams)))
         }
         const onPage = (event: DataTablePageEvent) => {
             console.log('page: ', event)
-            lazyParams.value = event
+            set(lazyParams, event)
             loadLazyData()
         }
         const onSort = (event: DataTableSortEvent) => {
             console.log('sort: ', event)
-            lazyParams.value = event
+            set(lazyParams, event)
             loadLazyData()
         }
         const onFilter = (event: DataTableFilterEvent) => {
             console.log('filter: ', event)
-            lazyParams.value = event
+            set(lazyParams, event)
             loadLazyData()
         }
 
         const onStateRestore = (event: DataTableStateEvent) => {
             console.log('state: ', event)
-            lazyParams.value.rows = event.rows
-            lazyParams.value.first = event.first
-            lazyParams.value.sortField = event.sortField
-            lazyParams.value.sortOrder = event.sortOrder
-            lazyParams.value.filters = event.filters
-            lazyParams.value.multiSortMeta = event.multiSortMeta
+
+            get(lazyParams).rows = event.rows
+            get(lazyParams).first = event.first
+            get(lazyParams).sortField = event.sortField
+            get(lazyParams).sortOrder = event.sortOrder
+            get(lazyParams).filters = event.filters
+            get(lazyParams).multiSortMeta = event.multiSortMeta
 
             loadLazyData()
         }
@@ -157,7 +156,6 @@ export default defineComponent({
         }
 
         return {
-            onRowClick,
             dt,
             loading,
             totalRecords,
@@ -165,11 +163,13 @@ export default defineComponent({
             lazyParams,
             selectAll,
             result,
+
             loadLazyData,
             onPage,
             onSort,
             onFilter,
             onStateRestore,
+            onRowClick,
 
             scrollHeight,
         }
