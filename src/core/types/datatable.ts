@@ -29,3 +29,5 @@ export type DataTableFilter = DataTableFilterMeta
 export type DataTablePageEvent = DTPE
 export type DataTableSortEvent = DTSE
 export type DataTableFilterEvent = DTFE
+
+export type DTEvent = DataTablePageEvent | DataTableSortEvent | DataTableFilterEvent

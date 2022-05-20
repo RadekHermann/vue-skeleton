@@ -1,9 +1,41 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <rh-input-text />
-
             <div class="card mb-0 p-3" style="max-height: calc(100vh - 160px)">
+                <rh-data-table controller="material">
+                    <template #header>
+                        <div class="table-header">
+                            Products
+                            <PButton icon="pi pi-refresh" />
+                        </div>
+                    </template>
+
+                    <PColumn selectionMode="multiple" class="align-center"></PColumn>
+                    <PColumn field="id" header="ID" sortable ref="id" class="column-size-300">
+                        <template #filter="{ filterModel, filterCallback }">
+                            <PInputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" />
+                        </template>
+                    </PColumn>
+                    <PColumn field="nazev" header="Název" ref="nazev" :sortable="true">
+                        <template #filter="{ filterModel, filterCallback }">
+                            <PInputText
+                                type="text"
+                                v-model="filterModel.value"
+                                @keydown.enter="filterCallback()"
+                                class="p-column-filter"
+                                placeholder="Search by name"
+                            />
+                        </template>
+                    </PColumn>
+
+                    <template #paginatorstart>
+                        <PButton type="button" icon="pi pi-refresh" class="p-button-text" />
+                    </template>
+                    <template #paginatorend>
+                        <PButton type="button" icon="pi pi-cloud" class="p-button-text" />
+                    </template>
+                </rh-data-table>
+
                 <DataTable
                     class="p-datatable-sm"
                     :lazy="true"
@@ -42,14 +74,10 @@
                     </template>
 
                     <Column selectionMode="multiple" class="column-size-50 justify-content-center"></Column>
-                    <Column field="id" header="ID" sortable ref="id" class="column-size-300">
-                        <template #filter="{ filterModel, filterCallback }">
-                            <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" />
-                        </template>
-                    </Column>
+                    <Column field="id" header="ID" :sortable="false" ref="id" class="column-size-300"> </Column>
                     <Column field="nazev" header="Název" ref="nazev" :sortable="true">
                         <template #filter="{ filterModel, filterCallback }">
-                            <InputText
+                            <PInputText
                                 type="text"
                                 v-model="filterModel.value"
                                 @keydown.enter="filterCallback()"
@@ -81,18 +109,15 @@ import { useODataList } from '@/core/composable/odata.composable'
 
 import DataTable, { DataTableStateEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
-import InputText from 'primevue/inputtext'
 
 import { DataTablePageEvent, DataTableSortEvent, DataTableFilterEvent, DataTableFilter, FilterMatchMode, OperatorMode } from '@/core/types/datatable'
-
-import RhInputText from '@/components/RhInputText.vue'
+import RhDataTable from '@/components/RhDataTable.vue'
 
 export default defineComponent({
     components: {
         DataTable,
         Column,
-        InputText,
-        RhInputText,
+        RhDataTable,
     },
     setup() {
         const windowHeight = ref(window.innerHeight)
@@ -111,13 +136,12 @@ export default defineComponent({
 
         const handleResize = () => set(windowHeight, window.innerHeight)
 
-        const { isLoading: loading, fetchData, result, count: totalRecords } = useODataList<any>('material')
+        const { isLoading: loading, fetchData, result, totalRecords } = useODataList<any>('material')
 
         const dt = ref()
         const selectAll = ref(false)
         const filters = ref<DataTableFilter>({
             jeSmazano: { value: false, matchMode: FilterMatchMode.EQUALS },
-            id: { operator: OperatorMode.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
             nazev: { operator: OperatorMode.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         })
         const lazyParams = ref({ first: 0, rows: 20, filters: get(filters) }) as Ref<DataTableSortEvent>

@@ -30,10 +30,11 @@ import BlockUI from 'primevue/blockui'
 import Menu from 'primevue/menu'
 import Toolbar from 'primevue/toolbar'
 
-import { primeCs } from './../locales/prime.cs'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
 
 export const enablePrimeVue = (app: App<Element>) => {
-    app.use(PrimeVue, { ripple: true, inputStyle: 'outlined', locale: primeCs })
+    app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' })
     app.use(ConfirmationService)
     app.use(ToastService)
 
@@ -57,6 +58,9 @@ export const enablePrimeVue = (app: App<Element>) => {
     app.component('BlockUI', BlockUI)
 
     app.component('PToolbar', Toolbar)
+
+    app.component('PDataTable', DataTable)
+    app.component('PColumn', Column)
 
     return app
 }

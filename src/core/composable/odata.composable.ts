@@ -13,7 +13,7 @@ const baseURL = '/odata/'
 export function useODataList<T>(controller: string) {
     const isLoading = ref(false)
     const result = ref([]) as Ref<T[]>
-    const count = ref(0)
+    const totalRecords = ref(0)
     const error = ref<AxiosError | null>(null)
 
     const fetchData = (query?: Partial<QueryOptions<T>>) => {
@@ -26,7 +26,7 @@ export function useODataList<T>(controller: string) {
             .get<ODataResult<T>>(baseURL + `${controller}${buildQuery(queryOptions)}`)
             .then(({ data }) => {
                 set(result, data.value)
-                set(count, data['@odata.count'])
+                set(totalRecords, data['@odata.count'])
             })
             .catch((err: AxiosError) => set(error, err))
             .finally(() => set(isLoading, false))
@@ -35,7 +35,7 @@ export function useODataList<T>(controller: string) {
     return {
         isLoading,
         result,
-        count,
+        totalRecords,
         error,
 
         fetchData,
