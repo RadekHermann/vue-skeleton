@@ -1,25 +1,25 @@
 .layout-sidebar {
-	position: fixed;
-	width: 300px;
-	height: 100vh;
-	z-index: 999;
-	user-select: none;
-	top: 0;
-	left: 0;
-	transition: transform $transitionDuration, left $transitionDuration;
-	background-color: var(--surface-overlay);
-    border-right: 1px solid var(--surface-border);
+    position: fixed;
+    width: 300px;
+    height: 100vh;
+    z-index: 999;
+    user-select: none;
+    top: 0;
+    left: 0;
+    transition: transform $transitionDuration, left $transitionDuration;
+    background-color: var(--surface-overlay);
 }
 
 .layout-sidebar-content {
     padding-top: 1.5rem;
     padding-left: 1.5rem;
     padding-bottom: 1.5rem;
-    height: 100%;
+    height: calc(100vh - 57px);
     overflow: auto;
+    border-right: 1px solid var(--surface-border);
 }
 
-.p-toolbar-header { 
+.p-toolbar-header {
     height: 57px;
     border-bottom: 1px solid var(--surface-border);
 }
@@ -31,19 +31,19 @@
 
     li {
         &.layout-menuitem-category {
-            margin-top: .75rem;
+            margin-top: 0.75rem;
 
             &:first-child {
                 margin-top: 0;
             }
         }
-        
+
         .layout-menuitem-root-text {
             text-transform: uppercase;
-            color:var(--surface-900);
+            color: var(--surface-900);
             font-weight: 600;
-            margin-bottom: .5rem;
-            font-size: .875rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
         }
 
         a {
@@ -51,11 +51,11 @@
             text-decoration: none;
             display: flex;
             align-items: center;
-            color:var(--text-color);
+            color: var(--text-color);
             transition: color $transitionDuration;
             border-radius: $borderRadius;
-            padding: .75rem 1rem;
-            transition: background-color .15s;
+            padding: 0.75rem 1rem;
+            transition: background-color 0.15s;
 
             span {
                 margin-left: 0.5rem;

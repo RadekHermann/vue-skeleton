@@ -15,5 +15,7 @@ export function changeTheme(dark: boolean): void {
             cloneLinkElement.setAttribute('id', elementId)
         })
         linkElement.parentNode?.insertBefore(cloneLinkElement, linkElement.nextSibling)
+
+        document.body.setAttribute('color-scheme', dark ? 'dark' : 'light')
     }
 }

@@ -8,12 +8,14 @@ import router from './router'
 
 import i18n from './plugins/i18n'
 import { enablePrimeVue } from './plugins/primevue.plugin'
+import { enableComponents } from './plugins/components'
 
 import CountryFlag from '@/components/CountryFlag.vue'
 
 const app = createApp(AppWrapper).use(createPinia()).use(i18n)
 
 enablePrimeVue(app)
+enableComponents(app)
 
 app.component('CountryFlag', CountryFlag)
 

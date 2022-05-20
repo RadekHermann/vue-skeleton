@@ -27,6 +27,7 @@ import Message from 'primevue/message'
 
 import BlockUI from 'primevue/blockui'
 
+import Menu from 'primevue/menu'
 import Toolbar from 'primevue/toolbar'
 
 import { primeCs } from './../locales/prime.cs'
@@ -52,6 +53,7 @@ export const enablePrimeVue = (app: App<Element>) => {
     app.component('PPassword', Password)
     app.component('PCheckbox', Checkbox)
 
+    app.component('PMenu', Menu)
     app.component('BlockUI', BlockUI)
 
     app.component('PToolbar', Toolbar)

@@ -19,25 +19,18 @@
                         </div>
 
                         <div class="w-full md:w-10 mx-auto">
-                            <div class="field">
-                                <label for="userName" class="block text-900 text-xl font-medium mb-2">
-                                    {{ t('UserName') }} <span style="color: red">*</span>
-                                </label>
-                                <PInputText
-                                    id="userName"
-                                    ref="inputUserName"
-                                    v-model="v$.userName.$model"
-                                    type="text"
-                                    class="w-full"
-                                    :placeholder="t('UserName')"
-                                    style="padding: 1rem"
-                                    :class="{ 'p-invalid': v$.userName.$invalid && submitted }"
-                                    autocomplete="on"
-                                />
-                                <small v-if="v$.userName.required.$invalid && submitted" class="p-error">
-                                    {{ t('UserNameRequired') }}
-                                </small>
-                            </div>
+                            <rh-input-text
+                                :float="false"
+                                required
+                                v-model="v$.userName.$model"
+                                :label="t('UserName')"
+                                labelClass="text-900 text-xl font-medium"
+                                inputStyle="padding:1rem"
+                                iconRight="pi pi-user"
+                                :validate="submitted"
+                                :invalid="v$.userName.$invalid"
+                                :errorText="t('UserNameRequired')"
+                            />
 
                             <div class="field">
                                 <label for="password" class="block text-900 font-medium text-xl mb-2">
@@ -52,7 +45,7 @@
                                     inputClass="w-full"
                                     inputStyle="padding:1rem"
                                     :feedback="false"
-                                    :class="{ 'p-invalid': v$.userName.$invalid && submitted }"
+                                    :class="{ 'p-invalid': v$.password.$invalid && submitted }"
                                     autocomplete="on"
                                 />
                                 <small v-if="v$.password.required.$invalid && submitted" class="p-error">

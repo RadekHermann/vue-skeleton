@@ -1,8 +1,8 @@
 .layout-toolbar {
     position: fixed;
     width: 100%;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     background-color: var(--surface-card);
     transition: padding-left $transitionDuration;
 
@@ -20,7 +20,7 @@
     height: 2.5rem;
     line-height: 2.5rem;
     text-align: center;
-    
+
     transition: transform $transitionDuration;
 
     &:hover {

@@ -1,6 +1,8 @@
 <template>
     <div class="grid">
         <div class="col-12">
+            <rh-input-text />
+
             <div class="card mb-0 p-3" style="max-height: calc(100vh - 160px)">
                 <DataTable
                     class="p-datatable-sm"
@@ -83,11 +85,14 @@ import InputText from 'primevue/inputtext'
 
 import { DataTablePageEvent, DataTableSortEvent, DataTableFilterEvent, DataTableFilter, FilterMatchMode, OperatorMode } from '@/core/types/datatable'
 
+import RhInputText from '@/components/RhInputText.vue'
+
 export default defineComponent({
     components: {
         DataTable,
         Column,
         InputText,
+        RhInputText,
     },
     setup() {
         const windowHeight = ref(window.innerHeight)
