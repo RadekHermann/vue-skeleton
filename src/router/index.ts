@@ -22,7 +22,6 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'empty',
                 meta: {
-                    auth: true,
                     breadcrumb: {
                         labelKey: 'empty',
                         href: true,

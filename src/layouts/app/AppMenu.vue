@@ -1,6 +1,13 @@
 <template>
-    <div class="layout-menu-container">
-        <AppSubMenu :items="menu" class="layout-menu" :root="true" @menuitem-click="$emit('menuitem-click', $event)" @keydown="onKeyDown" />
+    <PToolbar class="p-toolbar-header">
+        <template #start>
+            <span class="text-2xl">RH Skeleton APP</span>
+        </template>
+    </PToolbar>
+    <div class="layout-sidebar-content">
+        <div class="layout-menu-container">
+            <AppSubMenu :items="menu" class="layout-menu" :root="true" @menuitem-click="$emit('menuitem-click', $event)" @keydown="onKeyDown" />
+        </div>
     </div>
 </template>
 
@@ -26,42 +33,6 @@ export default defineComponent({
                         icon: 'pi pi-fw pi-home',
                         to: '/',
                     },
-                ],
-            },
-            {
-                label: 'UI Components',
-                icon: 'pi pi-fw pi-sitemap',
-                items: [
-                    { label: 'Form Layout', icon: 'pi-fw fa-solid fa-user', to: '/formlayout' },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/input' },
-                    { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', to: '/floatlabel' },
-                    { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', to: '/invalidstate' },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/button' },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', to: '/table' },
-                    { label: 'List', icon: 'pi pi-fw pi-list', to: '/list' },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/tree' },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/panel' },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/overlay' },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', to: '/media' },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/menu' },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/messages' },
-                    { label: 'File', icon: 'pi pi-fw pi-file', to: '/file' },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', to: '/chart' },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle-off', to: '/misc' },
-                ],
-            },
-            {
-                label: 'PrimeBlocks',
-                items: [
-                    { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', to: '/blocks', badge: 'NEW' },
-                    { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-vue', target: '_blank' },
-                ],
-            },
-            {
-                label: 'Utilities',
-                items: [
-                    { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', to: '/icons' },
-                    { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: 'https://www.primefaces.org/primeflex/', target: '_blank' },
                 ],
             },
             {

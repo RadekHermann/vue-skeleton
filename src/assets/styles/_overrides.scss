@@ -2,6 +2,10 @@
     z-index: 1001;
 }
 
+.p-toolbar {
+    border-radius: 0px;
+}
+
 .p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
     cursor: pointer;
 }

@@ -1,17 +1,27 @@
 .layout-sidebar {
 	position: fixed;
 	width: 300px;
-	height: calc(100vh - 7rem);
+	height: 100vh;
 	z-index: 999;
-	overflow-y: auto;
 	user-select: none;
-	top: 6rem;
-	left: 1rem;
+	top: 0;
+	left: 0;
 	transition: transform $transitionDuration, left $transitionDuration;
 	background-color: var(--surface-overlay);
-	border-radius: $borderRadius;
-    padding: 1.5rem;
-    box-shadow: 0px 3px 5px rgba(0,0,0,.02), 0px 0px 2px rgba(0,0,0,.05), 0px 1px 4px rgba(0,0,0,.08)
+    border-right: 1px solid var(--surface-border);
+}
+
+.layout-sidebar-content {
+    padding-top: 1.5rem;
+    padding-left: 1.5rem;
+    padding-bottom: 1.5rem;
+    height: 100%;
+    overflow: auto;
+}
+
+.p-toolbar-header { 
+    height: 57px;
+    border-bottom: 1px solid var(--surface-border);
 }
 
 .layout-menu {

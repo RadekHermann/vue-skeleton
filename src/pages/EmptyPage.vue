@@ -1,7 +1,7 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <div class="card mb-0 p-3" style="height: calc(100vh - 230px + 16px)">
+            <div class="card mb-0 p-3" style="max-height: calc(100vh - 160px)">
                 <DataTable
                     class="p-datatable-sm"
                     :lazy="true"
@@ -117,7 +117,7 @@ export default defineComponent({
         })
         const lazyParams = ref({ first: 0, rows: 20, filters: get(filters) }) as Ref<DataTableSortEvent>
 
-        const scrollHeight = computed(() => get(windowHeight) - 230 - 58 - 42 + 16 + 14 + 7 - 45 + 'px')
+        const scrollHeight = computed(() => get(windowHeight) - 230 + 'px')
 
         const loadLazyData = () => {
             fetchData(toQuery(get(lazyParams)))

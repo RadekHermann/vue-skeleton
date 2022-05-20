@@ -6,16 +6,24 @@
         </div>
 
         <div class="layout-main-container">
+            <div class="layout-main-breadcrumb">
+                <div class="layout-breadcrumb flex gap-1">
+                    <AppBreadcrumb class="flex-1" />
+                    <div class="flex-none flex align-items-center">
+                        <PButton icon="pi pi-sign-in" class="p-button-rounded p-button-text mx-1" />
+                        <PButton icon="pi pi-sign-in" class="p-button-rounded p-button-text mx-1" />
+                        <PButton icon="pi pi-sign-in" class="p-button-rounded p-button-text mx-1" />
+                    </div>
+                </div>
+            </div>
             <div class="layout-main">
-                <AppBreadcrumb />
-
                 <router-view />
             </div>
             <AppFooter />
         </div>
 
         <transition name="layout-mask">
-            <div class="layout-mask p-component-overlay" v-if="mobileMenuActive"></div>
+            <div class="layout-mask p-component-overlay" v-if="appState.mobileMenuActive"></div>
         </transition>
     </div>
 </template>
@@ -26,30 +34,27 @@ import { get, set } from '@vueuse/core'
 
 import { MenuItem } from '@/core/types/menu-item'
 
-import AppBreadcrumb from './AppBreadcrumb.vue'
 import AppTopbar from './AppTopbar.vue'
 import AppMenu from './AppMenu.vue'
 import AppFooter from './AppFooter.vue'
+import { useAppStore } from '@/store/app.store'
+import AppBreadcrumb from './AppBreadcrumb.vue'
 
 export default defineComponent({
     components: {
-        AppBreadcrumb: AppBreadcrumb,
         AppTopbar: AppTopbar,
         AppMenu: AppMenu,
         AppFooter: AppFooter,
+        AppBreadcrumb,
     },
     setup() {
         const menuClick = ref(false)
-        const menuInactive = ref(false)
-        const mobileMenuActive = ref(false)
 
-        const isDesktop = () => {
-            return window.innerWidth >= 992
-        }
+        const { state: appState, isDesktop, setMenuInactive, setMobileMenuActive } = useAppStore()
 
         const onWrapperClick = () => {
             if (!get(menuClick)) {
-                set(mobileMenuActive, false)
+                setMobileMenuActive(false)
             }
 
             set(menuClick, false)
@@ -58,9 +63,9 @@ export default defineComponent({
         const onMenuToggle = () => {
             set(menuClick, true)
             if (isDesktop()) {
-                set(menuInactive, !get(menuInactive))
+                setMenuInactive(!appState.menuInactive)
             } else {
-                set(mobileMenuActive, !get(mobileMenuActive))
+                setMobileMenuActive(!appState.mobileMenuActive)
             }
         }
 
@@ -70,7 +75,7 @@ export default defineComponent({
 
         const onMenuItemClick = (e: { item: MenuItem }) => {
             if (e.item && !e.item.items) {
-                set(mobileMenuActive, false)
+                setMobileMenuActive(false)
             }
         }
 
@@ -86,7 +91,7 @@ export default defineComponent({
 
         const isSidebarVisible = () => {
             if (isDesktop()) {
-                return !get(menuInactive)
+                return !get(appState.menuInactive)
             }
             return true
         }
@@ -96,22 +101,22 @@ export default defineComponent({
                 'layout-wrapper',
                 'layout-static',
                 {
-                    'layout-static-sidebar-inactive': get(menuInactive),
-                    'layout-mobile-sidebar-active': get(mobileMenuActive),
+                    'layout-static-sidebar-inactive': appState.menuInactive,
+                    'layout-mobile-sidebar-active': appState.mobileMenuActive,
                 },
             ]
         })
 
         onBeforeUpdate(() => {
-            if (get(mobileMenuActive)) addClass(document.body, 'body-overflow-hidden')
+            if (get(appState.mobileMenuActive)) addClass(document.body, 'body-overflow-hidden')
             else removeClass(document.body, 'body-overflow-hidden')
         })
 
         return {
+            appState,
+
             containerClass,
             menuClick,
-            menuInactive,
-            mobileMenuActive,
 
             isDesktop,
             isSidebarVisible,

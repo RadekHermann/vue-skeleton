@@ -1,5 +1,5 @@
 import { readonly, reactive } from 'vue'
-import { get, set, useNavigatorLanguage } from '@vueuse/core'
+import { get, set, useNavigatorLanguage, useWindowSize } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 import { changeTheme, darkModePreference } from '@/helpers/dark-mode'
@@ -12,6 +12,9 @@ import { primeEn } from '@/locales/prime.en'
 type AppState = {
     darkTheme: boolean
     locale: string
+
+    menuInactive: boolean
+    mobileMenuActive: boolean
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -19,9 +22,13 @@ export const useAppStore = defineStore('app', () => {
     const { language } = useNavigatorLanguage()
     const p$ = usePrimeVue()
 
+    const { width } = useWindowSize()
+
     const state = reactive<AppState>({
         darkTheme: localStorage.getItem('darkTheme') === null ? darkModePreference() : localStorage.getItem('darkTheme') === 'true',
         locale: localStorage.getItem('locale') ?? get(language)?.split('-')[0] ?? 'cs',
+        menuInactive: false,
+        mobileMenuActive: false,
     })
 
     const toggleDarkTheme = () => {
@@ -49,6 +56,11 @@ export const useAppStore = defineStore('app', () => {
         }
     }
 
+    const isDesktop = () => get(width) >= 992
+
+    const setMenuInactive = (val: boolean) => (state.menuInactive = val)
+    const setMobileMenuActive = (val: boolean) => (state.mobileMenuActive = val)
+
     const initDarkTheme = () => changeTheme(state.darkTheme)
     const initLocale = () => setLocale(state.locale)
 
@@ -60,5 +72,9 @@ export const useAppStore = defineStore('app', () => {
 
         toggleDarkTheme,
         setLocale,
+
+        isDesktop,
+        setMenuInactive,
+        setMobileMenuActive,
     }
 })

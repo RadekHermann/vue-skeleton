@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PBreadcrumb :home="home" :model="items" exact />
+        <PBreadcrumb :home="home" :model="items" />
     </div>
 </template>
 
