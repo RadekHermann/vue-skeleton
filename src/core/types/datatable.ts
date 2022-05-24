@@ -31,3 +31,23 @@ export type DataTableSortEvent = DTSE
 export type DataTableFilterEvent = DTFE
 
 export type DTEvent = DataTablePageEvent | DataTableSortEvent | DataTableFilterEvent
+
+export type DataTableColumn = {
+    field: string
+    header: string
+    sortable?: boolean
+    sortOrder?: number
+
+    filterable?: boolean
+    filterField?: string
+    filterUnaccent?: boolean
+
+    type?: 'text' | 'numeric' | 'date' | 'boolean' | 'array'
+
+    itemClass?: string
+    itemStyle?: string
+
+    ignoreQuery?: boolean
+
+    data?: (item: any) => any
+}

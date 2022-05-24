@@ -13,6 +13,7 @@
                 :style="inputStyle"
                 :modelValue="modelValue"
                 :placeholder="placeholder"
+                @update:modelValue="$emit('update:modelValue', $event)"
             />
             <i v-if="iconRight" :class="iconRight" />
             <label v-if="float && label" :for="id" class="block mb-2" :class="labelClass" :style="labelStyle"
