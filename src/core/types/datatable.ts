@@ -47,6 +47,10 @@ export type DataTableColumn = {
     itemClass?: string
     itemStyle?: string
 
+    controller?: string
+    optionLabel?: string
+    optionValue?: string
+
     ignoreQuery?: boolean
 
     data?: (item: any) => any

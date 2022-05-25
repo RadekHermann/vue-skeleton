@@ -39,7 +39,6 @@
                                 <PPassword
                                     id="current-password"
                                     v-model="v$.password.$model"
-                                    :placeholder="t('Password')"
                                     :toggleMask="true"
                                     class="w-full"
                                     inputClass="w-full"

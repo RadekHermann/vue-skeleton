@@ -46,6 +46,7 @@
                     :class="col.itemClass"
                     :style="col.itemStyle"
                     :dataType="col.type ?? 'text'"
+                    :showFilterMatchModes="col.type !== 'array' && col.type !== 'boolean'"
                 >
                     <template #body="slotProps" v-if="$slots[col.field]">
                         <slot :name="col.field" :data="slotProps.data" />
@@ -64,6 +65,14 @@
                         <PInputNumber v-if="col.type === 'numeric'" v-model="filterModel.value" @keypress.enter="filterCallback()" class="p-column-filter" />
                         <PCalendar v-if="col.type === 'date'" v-model="filterModel.value" dateFormat="dd.MM.yyyy" placeholder="dd.MM.yyyy" />
                         <PTriStateCheckbox v-if="col.type === 'boolean'" v-model="filterModel.value" @change="filterCallback()" />
+                        <RhMultiSelectFilter
+                            v-if="col.type === 'array'"
+                            v-model="filterModel.value"
+                            :controller="col.controller"
+                            :optionLabel="col.optionLabel"
+                            :optionValue="col.optionValue"
+                            @change="filterCallback()"
+                        />
                     </template>
                 </PColumn>
             </template>
@@ -85,6 +94,7 @@ import { useODataList } from '@/core/composable/odata.composable'
 import { DTEvent, DataTableColumn, DataTableFilter, FilterMatchMode, OperatorMode } from '@/core/types/datatable'
 import { toQuery, toSelectQuery } from '@/helpers/to-query'
 import { useRoute } from 'vue-router'
+import { debounce } from 'lodash'
 
 export default defineComponent({
     props: {
@@ -184,13 +194,7 @@ export default defineComponent({
                                 Object.assign(filters, { [col.field]: { value: null, matchMode: FilterMatchMode.DATE_IS } })
                             }
                         } else if (col.type === 'array') {
-                            if (props.filterDisplay === 'menu') {
-                                Object.assign(filters, {
-                                    [col.field]: { operator: OperatorMode.AND, constraints: [{ value: null, matchMode: FilterMatchMode.IN }] },
-                                })
-                            } else {
-                                Object.assign(filters, { [col.field]: { value: null, matchMode: FilterMatchMode.IN } })
-                            }
+                            Object.assign(filters, { [col.field]: { value: null, matchMode: FilterMatchMode.IN } })
                         } else {
                             if (props.filterDisplay === 'menu') {
                                 Object.assign(filters, {
@@ -229,6 +233,8 @@ export default defineComponent({
             slots,
 
             getStateKey,
+
+            debounce,
 
             onRequest,
             refresh,

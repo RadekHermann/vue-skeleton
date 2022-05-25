@@ -43,7 +43,7 @@ export default defineComponent({
 
         const columns: DataTableColumn[] = [
             { field: 'pocetJizd', header: 'Počet jízd', sortable: true, type: 'numeric', filterable: true },
-            { field: 'material.nazev', header: 'Materiál', filterable: true, sortable: true, type: 'text' },
+            { field: 'material.nazev', header: 'Materiál', filterable: true, sortable: true, type: 'array', controller: 'material' },
             { field: 'auto.spz', header: 'SPZ', filterable: true, filterField: 'auto.normalizedSpz' },
             {
                 field: 'auto.spolecnost.nazev',
@@ -53,7 +53,17 @@ export default defineComponent({
                 filterUnaccent: true,
                 filterField: 'auto.spolecnost.normalizedNazev',
             },
-            { field: 'auto.spolecnost.normalizedNazev', header: 'Společnost', filterable: true, sortable: true },
+            {
+                field: 'auto.spolecnost.normalizedNazev',
+                header: 'Společnost',
+                filterable: true,
+                sortable: true,
+                controller: 'spolecnost',
+                type: 'array',
+                optionLabel: 'nazev',
+                optionValue: 'id',
+                filterField: 'auto.spolecnost.id',
+            },
         ]
 
         return {

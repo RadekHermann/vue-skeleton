@@ -27,6 +27,7 @@ import Password from 'primevue/password'
 import Checkbox from 'primevue/checkbox'
 import TriStateCheckbox from 'primevue/tristatecheckbox'
 import Calendar from 'primevue/calendar'
+import MultiSelect from 'primevue/multiselect'
 
 import Message from 'primevue/message'
 
@@ -85,6 +86,7 @@ export const enablePrimeVue = (app: App<Element>) => {
     app.component('PCheckbox', Checkbox)
     app.component('PTriStateCheckbox', TriStateCheckbox)
     app.component('PCalendar', Calendar)
+    app.component('PMultiSelect', MultiSelect)
 
     app.component('PMenu', Menu)
     app.component('BlockUI', BlockUI)

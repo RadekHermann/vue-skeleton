@@ -98,14 +98,14 @@ export function toQuery<T>(e: DataTableSortEvent, columns?: DataTableColumn[]): 
             const col = columns?.find((c) => c.field === key)
             const filterKey = (columns?.find((f) => f.field === key)?.filterField ?? key).replaceAll('.', '/')
 
-            if (f.value !== null && f.value !== undefined) {
+            if (f.value !== null && f.value !== undefined && (!Array.isArray(f.value) || f.value.length)) {
                 filter.push({ [filterKey]: { [mapper[f.matchMode]]: col?.filterUnaccent ? deburr(f.value) : f.value } })
             } else if ((f as any as DataTableOperatorFilterMetaData).constraints) {
                 const o = f as any as DataTableOperatorFilterMetaData
                 const op: any = { [o.operator]: [] }
 
                 o.constraints.forEach((cons) => {
-                    if (cons.value !== null && cons.value !== undefined) {
+                    if (cons.value !== null && cons.value !== undefined && (!Array.isArray(cons.value) || cons.value.length)) {
                         if (cons.matchMode === FilterMatchMode.NOT_CONTAINS) {
                             op[o.operator].push({ not: { [filterKey]: { [mapper[cons.matchMode]]: col?.filterUnaccent ? deburr(cons.value) : cons.value } } })
                         } else {

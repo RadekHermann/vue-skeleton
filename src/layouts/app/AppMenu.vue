@@ -39,13 +39,10 @@ export default defineComponent({
                 label: 'Pages',
                 icon: 'pi pi-fw pi-clone',
                 items: [
-                    { label: 'Crud', icon: 'pi pi-fw pi-user-edit', to: '/crud' },
-                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', to: '/timeline' },
-                    { label: 'Landing', icon: 'pi pi-fw pi-globe', to: '/landing' },
-                    { label: 'Login', icon: 'pi pi-fw pi-sign-in', to: '/login' },
+                    { label: 'Crud', icon: 'pi pi-fw pi-user-edit', to: '/web-rtc/video' },
+                    { label: 'Login', icon: 'pi pi-fw pi-sign-in', to: '/auth/login' },
                     { label: 'Error', icon: 'pi pi-fw pi-times-circle', to: '/error' },
                     { label: 'Not Found', icon: 'pi pi-fw pi-exclamation-circle', to: '/notfound' },
-                    { label: 'Access Denied', icon: 'pi pi-fw pi-lock', to: '/access' },
                     { label: 'Empty', icon: 'pi pi-fw pi-circle-off', to: '/empty' },
                 ],
             },
@@ -98,25 +95,6 @@ export default defineComponent({
                                 ],
                             },
                         ],
-                    },
-                ],
-            },
-            {
-                label: 'Get Started',
-                items: [
-                    {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-question',
-                        command: () => {
-                            window.location.href = '#/documentation'
-                        },
-                    },
-                    {
-                        label: 'View Source',
-                        icon: 'pi pi-fw pi-search',
-                        command: () => {
-                            window.location.href = 'https://github.com/primefaces/sakai-vue'
-                        },
                     },
                 ],
             },

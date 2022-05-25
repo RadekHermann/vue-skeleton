@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, Ref, ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { get, set } from '@vueuse/core'
 
 import { MediaConnection, Peer } from 'peerjs'
@@ -68,8 +68,8 @@ export default defineComponent({
             peer.on('open', () => {
                 const call = peer.call(peerId.value, localStream.value)
 
-                call.peerConnection.ontrack = (event) => {
-                    event.streams.forEach((stream) => {
+                call.peerConnection.ontrack = (event: any) => {
+                    event.streams.forEach((stream: any) => {
                         if (!remoteVideos.some((s) => s.id === stream.id)) {
                             remoteVideos.push(stream)
                         }
@@ -87,11 +87,11 @@ export default defineComponent({
                 config: servers,
             })
 
-            peer.on('call', (call) => {
+            peer.on('call', (call: any) => {
                 call.answer(get(localStream))
 
-                call.peerConnection.ontrack = (event) => {
-                    event.streams.forEach((stream) => {
+                call.peerConnection.ontrack = (event: any) => {
+                    event.streams.forEach((stream: any) => {
                         if (!remoteVideos.some((s) => s.id === stream.id)) {
                             remoteVideos.push(stream)
                         }
@@ -114,7 +114,7 @@ export default defineComponent({
                 videoTrack.onended = () => stopScreenShare()
 
                 if (peer) {
-                    let sender = currentCall.peerConnection.getSenders().find((sender) => sender?.track?.id === localTrack.id)
+                    let sender = currentCall.peerConnection.getSenders().find((sender: any) => sender?.track?.id === localTrack.id)
                     if (sender) {
                         sender.replaceTrack(videoTrack)
                         set(screenSharing, true)
@@ -129,7 +129,7 @@ export default defineComponent({
             const videoTrack = get(localStream).getVideoTracks()[0]
 
             if (peer) {
-                const sender = currentCall.peerConnection.getSenders().find((sender) => sender?.track?.id === screenTrack.id)
+                const sender = currentCall.peerConnection.getSenders().find((sender: any) => sender?.track?.id === screenTrack.id)
                 if (sender) {
                     sender.replaceTrack(videoTrack)
                 }
