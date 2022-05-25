@@ -168,7 +168,7 @@ export default defineComponent({
             set(multiSortMeta, e.multiSortMeta)
             Object.assign(filters, e.filters)
 
-            fetchData({ ...toSelectQuery(props.columns, props.selectQuery), ...toQuery(e, props.columns) })
+            fetchData({ ...toSelectQuery(props.columns, props.selectQuery), ...toQuery(e, props.columns), skip: e.first, top: e.rows })
         }
 
         watchEffect(() => {

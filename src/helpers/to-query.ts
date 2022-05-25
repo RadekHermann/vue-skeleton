@@ -77,9 +77,6 @@ export function toSelectQuery(columns: DataTableColumn[], selectQuery?: string[]
 }
 
 export function toQuery<T>(e: DataTableSortEvent, columns?: DataTableColumn[]): Partial<QueryOptions<T>> {
-    const skip = e.first
-    const top = e.rows
-
     const orderBy = (
         (e.multiSortMeta
             ? e.multiSortMeta.map((m) => m.field + ' ' + (m.order === 1 ? 'asc' : 'desc'))
@@ -123,8 +120,6 @@ export function toQuery<T>(e: DataTableSortEvent, columns?: DataTableColumn[]): 
 
     return {
         orderBy,
-        skip,
-        top,
         filter,
     }
 }
