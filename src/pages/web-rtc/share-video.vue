@@ -6,14 +6,14 @@
                 {{ id }}
             </div>
             <div class="col-12">
-                <video ref="webcamVideo" autoplay playsinline></video>
+                <video controls ref="webcamVideo" autoplay playsinline></video>
             </div>
             <div class="col-6" v-for="remoteVideo in remoteVideos" :key="remoteVideo.id">
-                <video ref="remoteVideo" :srcObject="remoteVideo" autoplay playsinline></video>
+                <video controls ref="remoteVideo" :srcObject="remoteVideo" autoplay playsinline></video>
             </div>
             <div class="col-12">
                 <p-input-text v-model="peerId" />
-                <p-button @click="onAnswer" :label="'Answer'" />
+                <p-button @click="onAnswer" :label="'Answeree'" />
                 <p-button @click="startScreenShare" :label="'Start screen share'" />
                 <p-button @click="stopScreenShare" :label="'Stop screen share'" />
             </div>

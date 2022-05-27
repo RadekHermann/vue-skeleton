@@ -29,8 +29,19 @@
         @state-restore="onRequest($event)"
         @row-click="$emit('row-click', $event)"
     >
-        <template #header>
+        <template #header v-if="$slots.header">
             <slot name="header" :refresh="refresh" />
+        </template>
+        <template #header v-else>
+            <div class="flex justify-content-between">
+                <div>
+                    {{ title }}
+                </div>
+                <div class="flex gap-2">
+                    <PButton icon="pi pi-refresh" @click="refresh" />
+                    <PButton icon="pi pi-file-excel" @click="exportExcel" />
+                </div>
+            </div>
         </template>
 
         <template #default>
@@ -93,6 +104,7 @@ import { get, set } from '@vueuse/core'
 import { useODataList } from '@/core/composable/odata.composable'
 import { DTEvent, DataTableColumn, DataTableFilter, FilterMatchMode, OperatorMode } from '@/core/types/datatable'
 import { toQuery, toSelectQuery } from '@/helpers/to-query'
+import { generateExcel } from '@/helpers/export/datatable.export'
 import { useRoute } from 'vue-router'
 import { debounce } from 'lodash'
 
@@ -139,6 +151,7 @@ export default defineComponent({
             type: Array as () => string[],
             default: () => [],
         },
+        title: String,
     },
 
     setup(props, { slots }) {
@@ -216,6 +229,13 @@ export default defineComponent({
             refresh()
         })
 
+        const exportExcel = () => {
+            if (get(result).length) {
+                const fileName = prompt('Vložte název souboru', `${props.title || 'export'}.xlsx`)
+                if (fileName?.trim()) generateExcel(fileName.trim(), props.columns, get(result))
+            }
+        }
+
         const refresh = () => onRequest({ first: get(first), rows: get(rows), filters: filters, multiSortMeta: get(multiSortMeta) } as any)
 
         return {
@@ -238,6 +258,7 @@ export default defineComponent({
 
             onRequest,
             refresh,
+            exportExcel,
         }
     },
 })

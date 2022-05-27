@@ -29,6 +29,16 @@ const routes: Array<RouteRecordRaw> = [
                 },
                 component: EmptyPage,
             },
+            {
+                path: 'web-rtc',
+                component: EmptyLayout,
+                children: [
+                    {
+                        path: 'video',
+                        component: () => import('../pages/web-rtc/share-video.vue'),
+                    },
+                ],
+            },
         ],
     },
     {

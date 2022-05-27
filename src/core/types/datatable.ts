@@ -51,6 +51,8 @@ export type DataTableColumn = {
     optionLabel?: string
     optionValue?: string
 
+    dateFormat?: string
+
     ignoreQuery?: boolean
 
     data?: (item: any) => any

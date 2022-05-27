@@ -3,13 +3,6 @@
         <div class="col-12">
             <div class="card mb-0 p-3" style="max-height: calc(100vh - 160px)">
                 <rh-data-table controller="zavoz" :columns="columns" filter-display="menu">
-                    <template #header="propsData">
-                        <div class="table-header">
-                            Products
-                            <PButton icon="pi pi-refresh" @click="propsData.refresh" />
-                        </div>
-                    </template>
-
                     <template #[`auto.spz`]="slotProps">
                         {{ slotProps.data.auto.spz.toLowerCase() }}
                     </template>
